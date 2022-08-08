@@ -1,4 +1,4 @@
-let res = 40;
+let res = 70;
 let r = 200;
 let globe = [];
 
@@ -18,7 +18,7 @@ function setup() {
 			let y = r * sin(lon) * sin(lat);
 			let z = r * cos(lon);
 
-			globe[i].push(createVector(x + map(noise(x), 0, 1, -10, 10), y + map(noise(y), 0, 1, -10, 10), z + map(noise(z), 0, 1, -5, 5)));
+			globe[i].push(createVector(x + map(noise(x, y, z), 0, 1, -10, 10), y + map(noise(y, z, x), 0, 1, -10, 10), z + map(noise(z, x, y), 0, 1, -10, 10)));
 		}
 	}
 }
@@ -27,24 +27,32 @@ function setup() {
 
 function draw() {
 	background(0);
-	directionalLight(255, 255, 255, -1, -1, 0);
+	directionalLight(255, 255, 255, -1, 0.5, -0.5);
 
+	push();
 	//stroke(0);
 	noStroke();
 	rotateX(80);
-	//rotateZ(rotation);
+	rotateZ(rotation);
 	for (let i = 0; i < res; i++) {
+		push();
 		beginShape(TRIANGLE_STRIP);
 		for (let j = 0; j <= res; j++) {
 			let v1 = globe[i][j];
 			let v2 = globe[i+1][j];
 
-			ambientMaterial(0, 175, 255);
+			//normalMaterial();
+			ambientMaterial(56, 255, 175);
+			normal(v1.x, v1.y, v1.z);
 			vertex(v1.x, v1.y, v1.z);
+
+			normal(v2.x, v2.y, v2.z);
 			vertex(v2.x, v2.y, v2.z);
 		}
 		endShape();
+		pop();
 	}
+	pop();
 
 	rotation += 0.005;
 }
