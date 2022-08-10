@@ -20,6 +20,10 @@ let starsY = [];
 let starSize = [];
 let starColours = [];
 
+// Trees
+let trees;
+let numtrees = 100;
+
 // Title and other text
 let _text;
 
@@ -29,19 +33,12 @@ let rotation = 0;
 
 function setup() {
     angleMode(DEGREES);
-
 	let canv = createCanvas(windowWidth, windowHeight, WEBGL);
-
-    _text = createGraphics(600, 75);
-    _text.textFont('Source Code Pro');
-    _text.textAlign(CENTER);
-    _text.textSize(50);
-    _text.fill(255);
-    _text.noStroke();
-    _text.text('P5.js Garden Project', 300, 50);
 
     document.oncontextmenu = function() { return false; } // No menu appears on right click
     canv.mousePressed(setup);
+
+    trees = []; // Clear trees list
 
     // Terrain and atmosphere colours
 	baseTerrain = color(random(50, 255), random(50, 255), random(50, 255));
@@ -83,6 +80,7 @@ function setup() {
 		}
 	}
 
+
     // Create list of vertices for atmosphere
     for (let i = 0; i <= res2; i++) {
         let lon = map(i, 0, res2, -180, 180);
@@ -106,11 +104,18 @@ function setup() {
 		starColours.push(color(random(200, 255), random(200, 255), random(200, 255)));
 	}
 
+    // Create list of vertices for trees
+    for (let i = 0; i < numtrees; i++) {
+        let mainList = floor(random(globe.length));
+        let subList = floor(random(globe[mainList].length));
+        trees.push(globe[mainList][subList]);
+    }
+
     clicks++;
 
     let saveButton = createButton("save");
     saveButton.style("width: 75px; height: 30px");
-    saveButton.position((width / 2) - (37.5), 100);
+    saveButton.position((width / 2) - (37.5), 25);
     saveButton.mousePressed(Save);
 }
 
@@ -119,13 +124,6 @@ function setup() {
 function draw() {
 	background(0);
     angleMode(DEGREES);
-
-    push();
-    noStroke();
-    translate(0, -height / 2 + 50);
-    texture(_text);
-    plane(600, 75);
-    pop();
 
 	directionalLight(255, 255, 255, -0, 0, -1);
 	//ambientLight(255);
@@ -164,7 +162,6 @@ function draw() {
 		endShape();
 		pop();
 	}
-    pop();
 
     push();
     noStroke();
@@ -185,6 +182,14 @@ function draw() {
         endShape();
         pop();
     }
+
+    push();
+    for (let i = 0; i < numtrees; i++) {
+        translate(trees[i]);
+        emissiveMaterial(255);
+        box(10, 10, 10);
+    }
+    pop();
     pop();
 
 	// rotation += 0.0025;
