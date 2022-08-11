@@ -1,4 +1,4 @@
-# P5js Garden Project
+# P5.js Garden Project
 
 ## Summary
 
