@@ -9,7 +9,7 @@ In the unlikely event that you, the unfortunate reader, have managed to stumble 
 - **The finished project can be found [here](https://p5.tomat05.net)**
 - I originally tried doing this with a cube-sphere (create 6 faces, arrange them as a cube, then force each vertex to be equidistant from the centre)
 as this results in a much more even spread of detail than a UV sphere.
-- However, at this point I was on about iteration 8 having tried:
+- However, at this point I was on about the millionth iteration having tried:
     - An early version of this planet thing that was extremely broken
     - 3d procedural terrain (I decided to switch to something else because I'm indecisive like that)
     - Multiple versions of a "design your own garden" thing using a grid of tiles which then turned into...
