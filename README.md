@@ -10,11 +10,11 @@ as this results in a much more even spread of detail than a UV sphere.
     - Multiple versions of a "design your own garden" thing using a grid of tiles which then turned into...
     - Longer than I would like to admit trying to create a procedural garden generator using a wavefuntion collapse algorithm (however I currently lack the skills to follow through fully with this)
     - Attempt two of the aforementioned cube-sphere
-- Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
++ Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
 
 ## Thoughts
 
-- If I were to do this again I would probably go for a more object-oriented approach (if only to help with readability as the current mess of functions and variables can be a little confusing to work out at a glance)
-- This project can definitely be optimised but I would rather focus on projects that are more interesting and/or useful to me such as learning C and C++, and continuing to develop with C# and the Unity game engine
++ If I were to do this again I would probably go for a more object-oriented approach (if only to help with readability as the current mess of functions and variables can be a little confusing to work out at a glance)
++ This project can definitely be optimised but I would rather focus on projects that are more interesting and/or useful to me such as learning C and C++, and continuing to develop with C# and the Unity game engine
 <br>
-- I will probably have another go at wavefunction collapse using a tool such as Unity where I don't have to wrestle with the weird global-ish origin that p5.js uses that seems to have a mind of its own!
++ I will probably have another go at wavefunction collapse using a tool such as Unity where I don't have to wrestle with the weird global-ish origin that p5.js uses that seems to have a mind of its own!
