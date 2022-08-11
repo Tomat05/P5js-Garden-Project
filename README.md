@@ -21,7 +21,7 @@ as this results in a much more even spread of detail than a UV sphere.
 ## Additional Thoughts
 
 - If I were to do this again I would probably go for a more object-oriented approach (if only to help with readability as the current mess of functions and variables can be a little confusing to work out at a glance)
-- This project can definitely be optimised but I would rather focus on projects that are more interesting and/or useful to me such as learning C and C++, and continuing to develop with C# and the Unity game engine
+- This project could definitely be optimised further but I would rather focus on projects that are more interesting and/or useful to me such as beginning to learn C and C++, continuing to develop with C# and the Unity game engine, and learning to create web-apps using React.js as a friend and I have an [ongoing project](https://lizard.social/) which will use this
 
 
 - I will probably have another go at wavefunction collapse using a tool such as Unity where I can learn more about it with a more feature-rich tool and without having to wrestle with the weird global-ish origin that p5.js uses that seems to have a mind of its own!
