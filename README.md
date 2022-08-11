@@ -10,7 +10,8 @@ as this results in a much more even spread of detail than a UV sphere.
     - Multiple versions of a "design your own garden" thing using a grid of tiles which then turned into...
     - Longer than I would like to admit trying to create a procedural garden generator using a wavefuntion collapse algorithm (however I currently lack the skills to follow through fully with this)
     - Attempt two of the aforementioned cube-sphere
-+ Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
+- Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
+- Unfortunately, I lacked the foresight and basic intelligence to save most of the failed projects, however, the attempted wavefunction collapse can be found [here](https://p5.tomat05.net)
 
 ## Thoughts
 
