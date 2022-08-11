@@ -1,3 +1,5 @@
+// To anyone reading this, I'm sorry :)
+
 // TERRAIN
 let res1 = 70;
 let r1 = 200;
@@ -29,9 +31,11 @@ let leafSizes = [];
 // MOUSE
 let rotationX = 0;
 let mouseXOld;
+let zoom = 1;
 
-// MISC
+// SCREENSHOT
 let title;
+let screenshot = false;
 
 
 function preload() {
@@ -46,8 +50,7 @@ function setup() {
 
     document.oncontextmenu = function() { return false; } // No menu appears on right click
 
-    mouseXOld = mouseX; // Set initial mouseXOld and mouseYOld
-    mouseYOld = mouseY;
+    mouseXOld = mouseX; // Set initial mouseXOld
 
     CreateStars(); // Generate everything
     Generate();
@@ -55,7 +58,7 @@ function setup() {
     // Button to save picture of canvas
     let saveButton = createButton("Save");
     saveButton.style("width: 75px; height: 30px");
-    saveButton.position((width / 2) - (37.5), 120);
+    saveButton.position(10, 20);
     saveButton.mousePressed(Save);
 }
 
@@ -66,11 +69,13 @@ function draw() {
     angleMode(DEGREES); // WHY. IS. THE. DEFAULT. RADIANS. ALSKJDHSLDKJF >:/
 
     // TITLE
-    push();
-    translate(-218.5, -height / 2 + 20);
-    texture(title);
-    rect(0, 0, 437, 66.5);
-    pop();
+    if (screenshot) {
+        push();
+        translate(-width / 2 + 20, -height / 2 + 20);
+        texture(title);
+        rect(0, 0, 437, 44.5);
+        pop();
+    }
 
     // LIGHTS
 	directionalLight(255, 255, 255, 0, 0, -1);
@@ -86,11 +91,10 @@ function draw() {
 	}
 	pop();
 
-
+    scale(zoom);
     // PLANET
 	push();
 	noStroke();
-    
 	rotateX(90);
     rotateZ(rotationX);
 
@@ -120,7 +124,7 @@ function draw() {
                 rotateY(90 + map(j, 0, res1, 360, 0));
                 box(treeHeights[i][j], 5, 5);
 
-                let leafColour = color(255 - red(terrainColours[i][j]), 255 - green(terrainColours[i][j]), 255 - blue(terrainColours[i][j]));
+                let leafColour = color(255 - red(terrainColours[i][j]), 255 - green(terrainColours[i][j]), 255 - blue(terrainColours[i][j])); // Invert colour for *spicy*
                 ambientMaterial(leafColour);
                 translate(treeHeights[i][j] / 2, 0, 0);
                 sphere(leafSizes[i][j]);
@@ -230,8 +234,8 @@ function CreateDetails() {
         leafSizes[i] = [];
         for (let j = 0; j < res1; j++) {
             trees[i].push(false);
-            leafSizes[i].push(0);
-            treeHeights[i].push(0);
+            leafSizes[i].push(0); // Filling arrays so useful values are in the correct positions - there are definitely better
+            treeHeights[i].push(0); // ways of doing this but this is performant enough for an introductory summer project
         }
     }
 
@@ -250,9 +254,11 @@ function CreateDetails() {
 
 // Save a 1440p picture of the canvas
 function Save() {
+    screenshot = true;
     resizeCanvas(2560, 1440);
     save("planet.png")
     resizeCanvas(windowWidth, windowHeight);
+    screenshot = false;
 }
 
 
@@ -268,7 +274,23 @@ function keyPressed() {
 
 // Movement stuff on mouse drag
 function mouseDragged() {
-    if (mouseButton === LEFT) {
-        rotationX -= (mouseX - mouseXOld) / 4;
+    switch (mouseButton) {
+        case LEFT:
+            rotationX -= (mouseX - mouseXOld) / 4;
+            break;
+
+        case RIGHT:
+            zoom += (mouseX - mouseXOld) / 500;
+            zoom = constrain(zoom, 0.2, 2);
+        
+        default:
+            break;
+    }
+}
+
+function mousePressed() {
+    if (mouseButton === CENTER) {
+        rotationX = 0;
+        zoom = 1;
     }
 }
