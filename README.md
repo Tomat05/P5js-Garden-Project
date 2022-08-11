@@ -3,7 +3,7 @@
 ## Summary
 
 - The project can be found [here](https://p5.tomat05.net)
-- I originally tried doing this with a cube-sphere (essentially 6 faces, arrange them as a cube, then force each vertex to be equidistant from the centre)
+- I originally tried doing this with a cube-sphere (create 6 faces, arrange them as a cube, then force each vertex to be equidistant from the centre)
 as this results in a much more even spread of detail than a UV sphere.
 - However, at this point I was on about iteration 8 having tried:
     - An early version of this planet thing that was extremely broken
