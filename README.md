@@ -22,7 +22,7 @@ as this results in a much more even spread of detail than a UV sphere.
 
 - If I were to do this again I would probably go for a more object-oriented approach (if only to help with readability as the current mess of functions and variables can be a little confusing to work out at a glance).
 - I would have liked to have had patches of the detail colour rather than stripes, but due to the sphere being built around strips of triangles, this was unavoidable and not worth undoing everything to change.
-- If I were to develop this project into a fully-fledged experience, I would research the possibility of using object instancing (as calculating every tree every frame is very expensive), or compute shaders (for creating all the triangles of the sphere mesh in a more efficient manner).
+- If I were to further develop this project, I would research the possibility of using object instancing (as calculating every tree every frame is very expensive), or compute shaders (for creating all the triangles of the sphere mesh in a more efficient manner).
 - This project could definitely be optimised further but I would rather focus on projects that are more interesting and/or useful to me such as beginning to learn C and C++, continuing to develop with C# and the Unity game engine, and learning to create web-apps using React.js as a friend and I have an [ongoing project](https://lizard.social/) which will use this.
 
 
