@@ -22,13 +22,18 @@ let starColours = [];
 
 // Trees
 let trees;
-let numtrees = 100;
+let numtrees = 30;
 
-// Title and other text
-let _text;
-
-
+let camera;
+let title;
 let rotation = 0;
+
+
+
+function preload() {
+    title = loadImage("P5Title.png"); // Using a texture as the in-built text requires 'createGraphic()' in WebGL mode which drastically decreases performance
+}
+
 
 
 function setup() {
@@ -37,12 +42,14 @@ function setup() {
 
     document.oncontextmenu = function() { return false; } // No menu appears on right click
 
+    camera = createCamera();
+
     Generate();
 
     // Button to save picture of canvas
     let saveButton = createButton("save");
     saveButton.style("width: 75px; height: 30px");
-    saveButton.position((width / 2) - (37.5), 25);
+    saveButton.position((width / 2) - (37.5), 120);
     saveButton.mousePressed(Save);
 }
 
@@ -50,10 +57,16 @@ function setup() {
 
 function draw() {
 	background(0);
-    angleMode(DEGREES);
+    angleMode(DEGREES); // WHY. IS. THE. DEFAULT. RADIANS. ALSKJDHSLDKJF >:/
+
+    // Title
+    push();
+    translate(-288, -height / 2 + 20);
+    texture(title);
+    rect(0, 0, 576, 324);
+    pop();
 
 	directionalLight(255, 255, 255, -0, 0, -1);
-	//ambientLight(255);
 
     // Draw stars
 	push();
@@ -65,10 +78,12 @@ function draw() {
 	}
 	pop();
 
+	//ambientLight(255);
+
 	push();
 	noStroke();
-	rotateX(90);
-	rotateZ(90);
+	//rotateX(90);
+	//rotateZ(rotation);
 
     // Draw Planet
 	for (let i = 0; i < res1; i++) {
@@ -78,11 +93,13 @@ function draw() {
 			let v1 = globe[i][j];
 			let v2 = globe[i+1][j];
 
-			ambientMaterial(terrainColours[i][j]);
+            fill(v1.x, v1.y, v1.z);
+			//ambientMaterial(terrainColours[i][j]);
 			normal(v1.x, v1.y, v1.z);
 			vertex(v1.x, v1.y, v1.z);
 
-            ambientMaterial(terrainColours[i+1][j]);
+            //ambientMaterial(terrainColours[i+1][j]);
+            fill(v2.x, v2.y, v2.z);
 			normal(v2.x, v2.y, v2.z);
 			vertex(v2.x, v2.y, v2.z);
 		}
@@ -90,40 +107,43 @@ function draw() {
 		pop();
 	}
 
-    push();
-    noStroke();
-    for (let i = 0; i < res2; i++) {
-        push();
-        beginShape(TRIANGLE_STRIP);
-        for (let j = 0; j <= res2; j++) {
-            let v1 = atmos[i][j];
-            let v2 = atmos[i+1][j];
+    // push();
+    // noStroke();
+    // for (let i = 0; i < res2; i++) {
+    //     push();
+    //     beginShape(TRIANGLE_STRIP);
+    //     for (let j = 0; j <= res2; j++) {
+    //         let v1 = atmos[i][j];
+    //         let v2 = atmos[i+1][j];
 
-            fill(baseAtmos);
-            normal(v1.x, v1.y, v1.z);
-            vertex(v1.x, v1.y, v1.z);
+    //         fill(baseAtmos);
+    //         normal(v1.x, v1.y, v1.z);
+    //         vertex(v1.x, v1.y, v1.z);
 
-            normal(v2.x, v2.y, v2.z);
-            vertex(v2.x, v2.y, v2.z);
-        }
-        endShape();
-        pop();
-    }
-
-    push();
-    for (let i = 0; i < numtrees; i++) {
-        emissiveMaterial(255);
-        translate(trees[i]);
-        box(10, 10, 10);
-    }
-    pop();
+    //         normal(v2.x, v2.y, v2.z);
+    //         vertex(v2.x, v2.y, v2.z);
+    //     }
+    //     endShape();
+    //     pop();
+    // }
     pop();
 
-	// rotation += 0.0025;
+    // // Draw details
+    // push();
+    // noStroke();
+    // for (let i = 0; i < numtrees; i++) {
+    //     emissiveMaterial(255);
+    //     translate(trees[i]);
+    //     box(10, 10, 10);
+    // }
+    // pop();
+
+	rotation += 0.5;
+    //print(camera.eyeX, camera.eyeY, camera.eyeZ);
 }
 
 
-
+// General generation function
 function Generate() {
     CreateStars();
     CreatePlanet();
@@ -160,6 +180,7 @@ function CreatePlanet() {
             let nZ = z * generations;
 
             globe[i].push(createVector(x + map(noise(nX, nY, nZ), 0, 1, -10, 10), y + map(noise(nY, nX, nZ), 0, 1, -10, 10), z + map(noise(nZ, nX, nY), 0, 1, -10, 10)));
+            //globe[i].push(createVector(x, y, z));
 
             // Choose between base and detail colour for each vertex
             let whichColour = round(random());
