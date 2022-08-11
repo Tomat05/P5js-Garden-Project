@@ -1,6 +1,6 @@
 # P5.js Garden Project
 
-If anyone happens to stumble across this of their own accord:
+In the unlikely event that you, the unfortunate reader, have managed to stumble across this of their own accord:
 - Turn back while you still can!
 - If you insist on trying to make sense of my terrible code, feel free to fork / do whatever you like with it
 
@@ -13,7 +13,7 @@ as this results in a much more even spread of detail than a UV sphere.
     - An early version of this planet thing that was extremely broken
     - 3d procedural terrain (I decided to switch to something else because I'm indecisive like that)
     - Multiple versions of a "design your own garden" thing using a grid of tiles which then turned into...
-    - Longer than I would like to admit trying to create a procedural garden generator using a wavefuntion collapse algorithm (however I currently lack the skills to follow through fully with this)
+    - Longer than I would like to admit trying to create various different versions of a procedural garden generator using a wavefuntion collapse algorithm (unfortunately I currently lack the skills to achieve this)
     - Attempt two of the aforementioned cube-sphere
 - Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
 - Unfortunately, I lacked the foresight and basic intelligence to save most of the failed projects, however, the attempted wavefunction collapse (along with some random distraction projects) can be found [here](https://p5.tomat05.net) (not uploaded yet!)
