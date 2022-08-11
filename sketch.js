@@ -22,21 +22,17 @@ let starColours = [];
 
 // Trees
 let trees = [];
-let numtrees = 100;
-let tree1;
-let tree2;
+let treeHeights = [];
+let numtrees = 1000;
+let leafSizes = [];
 
 let title;
 let rotationX = 0;
-let rotationY = 0;
 let mouseXOld;
-let mouseYOld;
 
 
 function preload() {
     title = loadImage("P5Title.png"); // Using a texture as the in-built text requires 'createGraphic()' in WebGL mode which drastically decreases performance
-
-    tree1 = loadModel("tree1.obj");
 }
 
 
@@ -91,9 +87,8 @@ function draw() {
     // PLANET
 	push();
 	noStroke();
-	//rotateX(90);
-    //rotateZ(rotationX);
-    //rotateX(rotationY);
+	rotateX(90);
+    rotateZ(rotationX);
 
     // Draw Planet
 	for (let i = 0; i < res1; i++) {
@@ -103,50 +98,54 @@ function draw() {
 			let v1 = globe[i][j];
 			let v2 = globe[i+1][j];
 
-			//ambientMaterial(terrainColours[i][j]);
-            fill(255);
+			ambientMaterial(terrainColours[i][j]);
+            //fill(255);
 			normal(v1.x, v1.y, v1.z);
 			vertex(v1.x, v1.y, v1.z);
 
-            //ambientMaterial(terrainColours[i+1][j]);
+            ambientMaterial(terrainColours[i+1][j]);
 			normal(v2.x, v2.y, v2.z);
 			vertex(v2.x, v2.y, v2.z);
 
             // DETAILS
-            // if (trees[i][j] === true) {
-            //     push();
-            //     emissiveMaterial(i * 2);
-            //     translate(v1.x - 10, v1.y + 20, v1.z + 20);
-            //     rotateZ(map(i / 2, 0, res1 / 2, 0, 180));
-            //     // rotateY(90 + map(j, 0, res1, 360, 0));
-            //     cone(20, 50);
-            //     // scale(15);
-            //     // model(tree1);
-            //     pop()
-            // };
+            if (trees[i][j] === true) {
+                push();
+                ambientMaterial(terrainColours[i][j]);
+                translate(v1.x, v1.y, v1.z);
+                rotateZ(90 + map(i / 2, 0, res1 / 2, 0, 180));
+                rotateY(90 + map(j, 0, res1, 360, 0));
+                box(treeHeights[i][j], 5, 5);
+
+                let leafColour = color(255 - red(terrainColours[i][j]), 255 - green(terrainColours[i][j]), 255 - blue(terrainColours[i][j]));
+                ambientMaterial(leafColour);
+                translate(treeHeights[i][j] / 2, 0, 0);
+                sphere(leafSizes[i][j]);
+                pop()
+            };
 		}
 		endShape();
 		pop();
 	}
+    pop();
 
     // ATMOSPHERE
-    // push();
-    // noStroke();
-    // fill(baseAtmos);
-    // sphere(r2);
+    push();
+    noStroke();
+    rotateX(90);
+    fill(baseAtmos);
+    sphere(r2, res2, res2);
     pop();
 
     // Set old positions to new positions ready for next frame
 	mouseXOld = mouseX;
-    mouseYOld = mouseY;
 }
 
 
 // General generation function
 function Generate() {
-    CreateDetails();
     CreatePlanet();
     CreateAtmos();
+    CreateDetails();
 
     generations++;
 }
@@ -198,8 +197,8 @@ function CreatePlanet() {
 
 // Atmospheric colour and radius
 function CreateAtmos(){
-    baseAtmos = color(random(100, 255), random(100, 255), random(100, 255), random(75, 125));
-    r2 = random(250, 300); // atmosphere radius
+    baseAtmos = color(random(100, 255), random(100, 255), random(100, 255), random(30, 100));
+    r2 = random(260, 320); // atmosphere radius
 }
 
 
@@ -223,8 +222,12 @@ function CreateDetails() {
     // Populate trees array
     for (let i = 0; i <= res1; i++) {
         trees[i] = [];
+        treeHeights[i] = [];
+        leafSizes[i] = [];
         for (let j = 0; j < res1; j++) {
             trees[i].push(false);
+            leafSizes[i].push(0);
+            treeHeights[i].push(0);
         }
     }
 
@@ -234,6 +237,8 @@ function CreateDetails() {
         let randSub = floor(random(res1));
         
         trees[randMain][randSub] = true;
+        leafSizes[randMain][randSub] = (random(8, 12));
+        treeHeights[randMain][randSub] = (random(30, r2 - r1 - 10));
     }
 }
 
@@ -257,10 +262,9 @@ function keyPressed() {
 
 
 
-// Rotation stuff on mouse drag
+// Movement stuff on mouse drag
 function mouseDragged() {
     if (mouseButton === LEFT) {
         rotationX -= (mouseX - mouseXOld) / 4;
-        rotationY -= (mouseY - mouseYOld) / 4;
     }
 }
