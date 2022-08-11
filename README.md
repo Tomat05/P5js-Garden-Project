@@ -26,4 +26,4 @@ as this results in a much more even spread of detail than a UV sphere.
 - This project could definitely be optimised further but I would rather focus on projects that are more interesting and/or useful to me such as beginning to learn C and C++, continuing to develop with C# and the Unity game engine, and learning to create web-apps using React.js as a friend and I have an [ongoing project](https://lizard.social/) which will use this.
 
 
-- I will probably have another go at wavefunction collapse using a tool such as Unity where I can learn more about it with a more feature-rich tool and without having to wrestle with the weird global-not-global-no-transform-unless-you-literally-move-where-(0,0,0)-is origin that p5.js uses that seems to have a mind of its own!
+- I will probably have another go at wavefunction collapse using a tool such as Unity where I can learn more about it with a more feature-rich tool and without having to wrestle with the weird global-not-global-no-transforming-unless-you-literally-move-where-(0,0,0)-is origin that p5.js uses that seems to have a mind of its own!
