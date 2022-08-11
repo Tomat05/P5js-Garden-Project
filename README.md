@@ -6,7 +6,7 @@ In the unlikely event that you, the unfortunate reader, have managed to stumble 
 
 ## Summary
 
-- **The finished project can be found [here](https://p5.tomat05.net)**
+- **The finished project can be found [here](https://p5.tomat05.net).**
 - I originally tried doing the current planet project with a cube-sphere (create 6 faces, arrange them as a cube, then force each vertex to be equidistant from the centre)
 as this results in a much more even spread of detail than a UV sphere.
 - However, at this point I was on about the millionth iteration having tried:
