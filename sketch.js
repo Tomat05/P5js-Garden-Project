@@ -1,4 +1,4 @@
-// Terrain
+// TERRAIN
 let res1 = 70;
 let r1 = 200;
 let globe = [];
@@ -7,28 +7,31 @@ let terrainDetail;
 let terrainColours = [];
 let generations = 1;
 
-// Atmosphere
+// ATMOSPHERE
 let res2 = 70;
 let r2;
 let atmos = [];
 let baseAtmos;
 
-// Stars
+// STARS
 let numStars = 600;
 let starsX = [];
 let starsY = [];
 let starSize = [];
 let starColours = [];
 
-// Trees
+// TREES
 let trees = [];
 let treeHeights = [];
 let numtrees = 1000;
 let leafSizes = [];
 
-let title;
+// MOUSE
 let rotationX = 0;
 let mouseXOld;
+
+// MISC
+let title;
 
 
 function preload() {
@@ -87,6 +90,7 @@ function draw() {
     // PLANET
 	push();
 	noStroke();
+    
 	rotateX(90);
     rotateZ(rotationX);
 
