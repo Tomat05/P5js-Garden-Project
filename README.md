@@ -1,5 +1,9 @@
 # P5.js Garden Project
 
+If anyone happens to stumble across this of their own accord:
+- Turn back while you still can!
+- If you insist on trying to make sense of my terrible code, feel free to fork / do whatever you like with it
+
 ## Summary
 
 - The project can be found [here](https://p5.tomat05.net)
