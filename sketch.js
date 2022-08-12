@@ -58,7 +58,6 @@ let treePalette = 1;
 let title;
 let screenshot = false;
 
-
 function preload() {
     title = loadImage("P5Title.png"); // Using a texture as the in-built text requires 'createGraphic()' in WebGL mode which drastically decreases performance
 }
@@ -167,7 +166,7 @@ function draw() {
     }
 
     // LIGHTS
-	directionalLight(255, 255, 255, -1, 0.5, -0.5);
+	directionalLight(255, 255, 255, -1, 0, 0);
     //ambientLight(255);
 
     // STARS
@@ -182,27 +181,27 @@ function draw() {
 
     scale(zoom);
     // PLANET
-	push();
-	noStroke();
-	rotateX(90);
+    push();
+    noStroke();
+    rotateX(90);
     rotateZ(rotationX);
 
     // Draw Planet
-	for (let i = 0; i < res1; i++) {
-		push();
-		beginShape(TRIANGLE_STRIP);
-		for (let j = 0; j <= res1; j++) {
-			let v1 = globe[i][j];
-			let v2 = globe[i+1][j];
+    for (let i = 0; i < res1; i++) {
+        push();
+        beginShape(TRIANGLE_STRIP);
+        for (let j = 0; j <= res1; j++) {
+            let v1 = globe[i][j];
+            let v2 = globe[i+1][j];
 
-			ambientMaterial(terrainColours[i][j]);
+            ambientMaterial(terrainColours[i][j]);
             //fill(255);
-			normal(v1.x, v1.y, v1.z);
-			vertex(v1.x, v1.y, v1.z);
+            normal(v1.x, v1.y, v1.z);
+            vertex(v1.x, v1.y, v1.z);
 
             ambientMaterial(terrainColours[i+1][j]);
-			normal(v2.x, v2.y, v2.z);
-			vertex(v2.x, v2.y, v2.z);
+            normal(v2.x, v2.y, v2.z);
+            vertex(v2.x, v2.y, v2.z);
 
             // DETAILS
             if (trees[i][j] === true) {
@@ -232,10 +231,10 @@ function draw() {
                 sphere(leafSizes[i][j]);
                 pop()
             };
-		}
-		endShape();
-		pop();
-	}
+        }
+        endShape();
+        pop();
+    }
     pop();
 
     // ATMOSPHERE
