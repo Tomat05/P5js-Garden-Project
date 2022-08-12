@@ -4,7 +4,7 @@ In the unlikely event that you, the unfortunate reader, have managed to stumble 
 - Turn back while you still can!
 - If you insist on trying to make sense of my terrible code, feel free to fork / do whatever you like with it.
 
-## Summary
+### Summary
 
 - **The finished project can be found [here](https://p5.tomat05.net).**
 - I originally tried doing the current planet project with a cube-sphere (create 6 faces, arrange them as a cube, then force each vertex to be equidistant from the centre)
@@ -18,12 +18,12 @@ as this results in a much more even spread of detail than a UV sphere.
 - Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
 - Unfortunately, I lacked the foresight and basic intelligence to save most of the failed projects, however, the attempted wavefunction collapse (along with some random distraction projects) can be found [here](https://p5.tomat05.net) (not uploaded yet!).
 
-### Sources
+#### Sources
 
 - [Sphere](https://www.youtube.com/watch?v=RkuBWEkBrZA)
 - [P5.js reference](https://p5js.org/reference/)
 
-## Additional Thoughts
+### Additional Thoughts
 
 - If I were to do this again I would probably go for a more object-oriented approach (if only to help with readability as the current mess of functions and variables can be a little confusing to work out at a glance).
 - I would have liked to have had patches of the detail colour rather than stripes, but due to the sphere being built around strips of triangles, this was unavoidable and not worth undoing everything to change.
