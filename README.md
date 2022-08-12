@@ -18,7 +18,7 @@ as this results in a much more even spread of detail than a UV sphere.
 - Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
 - Unfortunately, I lacked the foresight and basic intelligence to save most of the failed projects, however, the attempted wavefunction collapse (along with some random distraction projects) can be found [here](https://p5.tomat05.net) (not uploaded yet!).
 
-#### Sources
+### Sources
 
 - [Sphere](https://www.youtube.com/watch?v=RkuBWEkBrZA)
 - [P5.js reference](https://p5js.org/reference/)
