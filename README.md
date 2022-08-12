@@ -22,7 +22,6 @@ as this results in a much more even spread of detail than a UV sphere.
 
 - [Sphere](https://www.youtube.com/watch?v=RkuBWEkBrZA)
 - [P5.js reference](https://p5js.org/reference/)
-- [Depth info](https://www.davepagurek.com/blog/depth-of-field/) and [example](https://editor.p5js.org/davepagurek/sketches/Sc3m8qyon)
 
 ### Additional Thoughts
 
