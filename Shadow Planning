@@ -1,0 +1,10 @@
+P5.js doesn't have shadows which is yet another reason why I fully indend on never using it ever again ever!
+
+# Plan
+
+- Directional light points in a vector
+- Pixel depth shows distance of object from camera
+
+1. for each pixel get the depth
+2. create a raycast from the pixel coords along the inverse of the light vector
+3. if there's an intersection, the pixel is in shadow
