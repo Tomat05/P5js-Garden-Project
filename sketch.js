@@ -8,6 +8,7 @@ let baseTerrain;
 let terrainDetail;
 let terrainColours = [];
 let generations = 1;
+let colourShift;
 
 // ATMOSPHERE
 let res2 = 70;
@@ -27,11 +28,31 @@ let trees = [];
 let treeHeights = [];
 let numtrees = 1000;
 let leafSizes = [];
+let minHeightSlide;
+let maxHeightSlide;
+let minHeight = 30;
+let maxHeight = 100;
 
 // MOUSE
 let rotationX = 0;
 let mouseXOld;
 let zoom = 1;
+
+// SIDEBAR
+let sidebar;
+let reveal = false;
+let slide;
+
+// TERRAIN COLOURS
+let usePicker;
+let pickerCheckBox;
+let colourPick;
+let paletteType;
+let palette = 2;
+
+// TREE COLOURS
+let treePaletteType;
+let treePalette = 1;
 
 // SCREENSHOT
 let title;
@@ -52,14 +73,49 @@ function setup() {
 
     mouseXOld = mouseX; // Set initial mouseXOld
 
-    CreateStars(); // Generate everything
-    Generate();
+    // SIDEBAR
+    slide = -200;
+
+    // Checkbox for whether to use picker or random colours
+    pickerCheckBox = createCheckbox(false);
+    pickerCheckBox.changed(CheckColourType);
+
+    // Colour picker for planet colour
+    colourPick = createColorPicker();
+
+    // Dropdown for selecting colour palette type of planet
+    paletteType = createSelect();
+    paletteType.option('Analogous');
+    paletteType.option('Complementary');
+    paletteType.option('Uniform');
+    paletteType.selected('Analogous');
+    paletteType.changed(ChangeColourPalette);
+
+    // Dropdown for selecting colour palette type of trees
+    treePaletteType = createSelect();
+    treePaletteType.option('Analogous');
+    treePaletteType.option('Complementary');
+    treePaletteType.option('Uniform');
+    treePaletteType.selected('Complementary');
+    treePaletteType.changed(ChangeTreePalette);
+
+    // Slider for tree min height
+    minHeightSlide = createSlider(0, 100, 30);
+    minHeightSlide.changed(ChangeTreeHeights);
+
+    // Slider for tree max height
+    maxHeightSlide = createSlider(0, 100, 100);
+    maxHeightSlide.changed(ChangeTreeHeights);
 
     // Button to save picture of canvas
-    let saveButton = createButton("Save");
-    saveButton.style("width: 75px; height: 30px");
-    saveButton.position(10, 20);
-    saveButton.mousePressed(Save);
+    // let saveButton = createButton("Save");
+    // saveButton.style("width: 75px; height: 30px");
+    // saveButton.position(10, 20);
+    // saveButton.mousePressed(Save);
+
+    // GENERATION
+    CreateStars(); // Generate everything
+    Generate();
 }
 
 
@@ -67,6 +123,39 @@ function setup() {
 function draw() {
 	background(0);
     angleMode(DEGREES); // WHY. IS. THE. DEFAULT. RADIANS. ALSKJDHSLDKJF >:/
+
+    // SIDEBAR
+    pickerCheckBox.position(slide + 10, 10);
+    colourPick.position(slide + 10, 35);
+    paletteType.position(slide + 10, 70);
+    treePaletteType.position(slide + 10, 120);
+    minHeightSlide.position(slide + 10, 150);
+    maxHeightSlide.position(slide + 10, 170);
+
+    push();
+    fill(20, 20, 20);
+    translate(0, -height / 2);
+    rect(-width / 2 + slide, 0, 200, height);
+
+    if (mouseX <= 15) {
+        reveal = true;
+    }
+    if (mouseX > 200) {
+        reveal = false;
+    }
+
+    if (reveal) {
+        if (slide < 0) {
+            slide += 10;
+        }
+    }
+    else {
+        if (slide > -200) {
+            slide -= 10;
+        }
+    }
+    pop();
+
 
     // TITLE
     if (screenshot) {
@@ -78,7 +167,7 @@ function draw() {
     }
 
     // LIGHTS
-	directionalLight(255, 255, 255, 0, 0, -1);
+	directionalLight(255, 255, 255, -1, 0.5, -0.5);
     //ambientLight(255);
 
     // STARS
@@ -118,14 +207,27 @@ function draw() {
             // DETAILS
             if (trees[i][j] === true) {
                 push();
-                ambientMaterial(terrainColours[i][j]);
+                let treeColour;
+                switch (treePalette) {
+                    case 0:
+                        treeColour = terrainColours[i][j];
+                        break;
+                    
+                    case 1:
+                        treeColour = color(255 - red(terrainColours[i][j]), 255 - green(terrainColours[i][j]), 255 - blue(terrainColours[i][j]));
+                        break;
+                    
+                    default:
+                        treeColour = color(red(terrainColours[i][j]) + colourShift, green(terrainColours[i][j]) + colourShift, blue(terrainColours[i][j]) + colourShift);
+                        break;
+                }
+                ambientMaterial(treeColour);
                 translate(v1.x, v1.y, v1.z);
                 rotateZ(90 + map(i / 2, 0, res1 / 2, 0, 180));
                 rotateY(90 + map(j, 0, res1, 360, 0));
                 box(treeHeights[i][j], 5, 5);
 
-                let leafColour = color(255 - red(terrainColours[i][j]), 255 - green(terrainColours[i][j]), 255 - blue(terrainColours[i][j])); // Invert colour for *spicy*
-                ambientMaterial(leafColour);
+                ambientMaterial(treeColour);
                 translate(treeHeights[i][j] / 2, 0, 0);
                 sphere(leafSizes[i][j]);
                 pop()
@@ -151,6 +253,8 @@ function draw() {
 
 // General generation function
 function Generate() {
+    colourShift = random(-100, -20);
+
     CreatePlanet();
     CreateAtmos();
     CreateDetails();
@@ -162,10 +266,28 @@ function Generate() {
 
 // Creates a planet
 function CreatePlanet() {
+
     // Terrain colours
-	baseTerrain = color(random(50, 255), random(50, 255), random(50, 255));
-    let colourShift = random(-100, -20);
-    terrainDetail = color(red(baseTerrain) + colourShift, green(baseTerrain) + colourShift, blue(baseTerrain) + colourShift);
+    if (usePicker) {
+        baseTerrain = colourPick.value();
+    }
+    else {
+        baseTerrain = color(random(50, 255), random(50, 255), random(50, 255));
+    }
+
+    switch (palette) {
+        case 0:
+            terrainDetail = baseTerrain;
+            break;
+        
+        case 1:
+            terrainDetail = color(255 - red(baseTerrain), 255 - green(baseTerrain), 255 - blue(baseTerrain));
+            break;
+        
+        default:
+            terrainDetail = color(red(baseTerrain) + colourShift, green(baseTerrain) + colourShift, blue(baseTerrain) + colourShift);
+            break;
+    }
 
     // Create array of vertices for terrain
 	for (let i = 0; i <= res1; i++) {
@@ -246,7 +368,7 @@ function CreateDetails() {
         
         trees[randMain][randSub] = true;
         leafSizes[randMain][randSub] = (random(8, 12));
-        treeHeights[randMain][randSub] = (random(30, r2 - r1 - 10));
+        treeHeights[randMain][randSub] = (random(minHeight, maxHeight));
     }
 }
 
@@ -265,7 +387,7 @@ function Save() {
 
 // Re-generate planet on enter key pressed
 function keyPressed() {
-    if (keyCode === ENTER) {
+    if (keyCode === 32) {
         Generate();
     }
 }
@@ -274,17 +396,20 @@ function keyPressed() {
 
 // Movement stuff on mouse drag
 function mouseDragged() {
-    switch (mouseButton) {
-        case LEFT:
-            rotationX -= (mouseX - mouseXOld) / 4;
-            break;
-
-        case RIGHT:
-            zoom += (mouseX - mouseXOld) / 500;
-            zoom = constrain(zoom, 0.2, 2);
-        
-        default:
-            break;
+    if (!reveal) {
+        switch (mouseButton) {
+            case LEFT:
+                rotationX -= (mouseX - mouseXOld) / 4;
+                break;
+    
+            case RIGHT:
+                zoom += (mouseX - mouseXOld) / 500;
+                zoom = constrain(zoom, 0.2, 2);
+                break;
+            
+            default:
+                break;
+        }
     }
 }
 
@@ -293,4 +418,60 @@ function mousePressed() {
         rotationX = 0;
         zoom = 1;
     }
+}
+
+
+
+function CheckColourType() {
+    if (pickerCheckBox.checked()) {
+        usePicker = true;
+    }
+    else {
+        usePicker = false;
+    }
+}
+
+
+
+function ChangeColourPalette() {
+    switch (paletteType.value()) {
+        case 'Uniform':
+            palette = 0;
+            break;
+        
+        case 'Complementary':
+            palette = 1;
+            break;
+        
+        default:
+            palette = 2;
+            break;
+    }
+    CreatePlanet();
+}
+
+
+
+function ChangeTreePalette() {
+    switch (treePaletteType.value()) {
+        case 'Uniform':
+            treePalette = 0;
+            break;
+        
+        case 'Complementary':
+            treePalette = 1;
+            break;
+
+        default:
+            treePalette = 2;
+            break;
+    }
+}
+
+
+
+function ChangeTreeHeights() {
+    minHeight = minHeightSlide.value();
+    maxHeight = maxHeightSlide.value();
+    CreateDetails();
 }
