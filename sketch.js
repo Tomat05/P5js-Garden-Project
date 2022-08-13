@@ -1,20 +1,31 @@
-// To anyone reading this, I'm sorry :)
-
 // TERRAIN
 let res1 = 70;
 let r1 = 200;
 let globe = [];
 let baseTerrain;
 let terrainDetail;
-let terrainColours = [];
 let generations = 1;
+
+let terrainColours = [];
 let colourShift;
+let usePicker;
+let pickerCheckBox;
+let colourPick;
+let paletteType;
+let palette = 2;
 
 // ATMOSPHERE
 let res2 = 70;
+
 let r2;
-let atmos = [];
+let minR2 = 260;
+let maxR2 = 320;
+let minR2Slide;
+let maxR2Slide;
+
 let baseAtmos;
+let atmosPaletteType;
+let atmosPalette = 3;
 
 // STARS
 let numStars = 600;
@@ -25,13 +36,23 @@ let starColours = [];
 
 // TREES
 let trees = [];
+let numTrees = 2000;
+let numTreesSlide;
+
+let treePaletteType;
+let treePalette = 1;
+
 let treeHeights = [];
-let numtrees = 1000;
-let leafSizes = [];
 let minHeightSlide;
 let maxHeightSlide;
 let minHeight = 30;
 let maxHeight = 100;
+
+let leafSizes = [];
+let leafMinSizeSlide;
+let leafMaxSizeSlide;
+let leafMinSize = 7;
+let leafMaxSize = 14;
 
 // MOUSE
 let rotationX = 0;
@@ -43,20 +64,11 @@ let sidebar;
 let reveal = false;
 let slide;
 
-// TERRAIN COLOURS
-let usePicker;
-let pickerCheckBox;
-let colourPick;
-let paletteType;
-let palette = 2;
-
-// TREE COLOURS
-let treePaletteType;
-let treePalette = 1;
-
 // SCREENSHOT
 let title;
 let screenshot = false;
+
+
 
 function preload() {
     title = loadImage("P5Title.png"); // Using a texture as the in-built text requires 'createGraphic()' in WebGL mode which drastically decreases performance
@@ -66,6 +78,7 @@ function preload() {
 
 function setup() {
     angleMode(DEGREES);
+
 	createCanvas(windowWidth, windowHeight, WEBGL);
 
     document.oncontextmenu = function() { return false; } // No menu appears on right click
@@ -98,13 +111,36 @@ function setup() {
     treePaletteType.selected('Complementary');
     treePaletteType.changed(ChangeTreePalette);
 
-    // Slider for tree min height
-    minHeightSlide = createSlider(0, 100, 30);
+    // Sliders for tree min/max height
+    minHeightSlide = createSlider(0, 150, 30);
     minHeightSlide.changed(ChangeTreeHeights);
-
-    // Slider for tree max height
-    maxHeightSlide = createSlider(0, 100, 100);
+    maxHeightSlide = createSlider(0, 150, 100);
     maxHeightSlide.changed(ChangeTreeHeights);
+
+    // Sliders for leaf min/max size
+    leafMinSizeSlide = createSlider(0, 20, 7);
+    leafMinSizeSlide.changed(ChangeLeafSizes);
+    leafMaxSizeSlide = createSlider(0, 20, 14);
+    leafMaxSizeSlide.changed(ChangeLeafSizes);
+
+    // Slider for number of trees
+    numTreesSlide = createSlider(0, 2000, 1000);
+    numTreesSlide.changed(ChangeNumTrees);
+
+    // Sliders for atmosphere min/max size
+    minR2Slide = createSlider(189, 400, 260);
+    minR2Slide.changed(ChangeAtmosRange);
+    maxR2Slide = createSlider(180, 400, 320)
+    maxR2Slide.changed(ChangeAtmosRange);
+
+    // Dropdown for atmosphere colour palette type
+    atmosPaletteType = createSelect();
+    atmosPaletteType.option('Analogous');
+    atmosPaletteType.option('Complemenatary');
+    atmosPaletteType.option('Uniform');
+    atmosPaletteType.option('Random');
+    atmosPaletteType.selected('Random');
+    atmosPaletteType.changed(ChangeAtmosPalette);
 
     // Button to save picture of canvas
     // let saveButton = createButton("Save");
@@ -130,6 +166,12 @@ function draw() {
     treePaletteType.position(slide + 10, 120);
     minHeightSlide.position(slide + 10, 150);
     maxHeightSlide.position(slide + 10, 170);
+    leafMinSizeSlide.position(slide + 10, 200)
+    leafMaxSizeSlide.position(slide + 10, 220)
+    numTreesSlide.position(slide + 10, 250);
+    minR2Slide.position(slide + 10, 280);
+    maxR2Slide.position(slide + 10, 300);
+    atmosPaletteType.position(slide + 10, 330);
 
     push();
     fill(20, 20, 20);
@@ -155,7 +197,6 @@ function draw() {
     }
     pop();
 
-
     // TITLE
     if (screenshot) {
         push();
@@ -166,8 +207,8 @@ function draw() {
     }
 
     // LIGHTS
-	directionalLight(255, 255, 255, -1, 0, 0);
-    //ambientLight(255);
+	// directionalLight(255, 255, 255, -1, 0, 0);
+    ambientLight(255);
 
     // STARS
 	push();
@@ -250,6 +291,7 @@ function draw() {
 }
 
 
+
 // General generation function
 function Generate() {
     colourShift = random(-100, -20);
@@ -326,8 +368,24 @@ function CreatePlanet() {
 
 // Atmospheric colour and radius
 function CreateAtmos(){
-    baseAtmos = color(random(100, 255), random(100, 255), random(100, 255), random(30, 100));
-    r2 = random(260, 320); // atmosphere radius
+    switch (atmosPalette) {
+        case 0:
+            baseAtmos = color(red(baseTerrain) + random(-100, -20), green(baseTerrain) + random(-100, -20), blue(baseTerrain) + random(-100, -20), random(30, 100));
+            break;
+
+        case 1:
+            baseAtmos = color(red(baseTerrain), green(baseTerrain), blue(baseTerrain), random(30, 100));
+            break;
+
+        case 2:
+            baseAtmos = color(255 - red(baseTerrain), 255 - green(baseTerrain), 255 - blue(baseTerrain), random(30, 100));
+            break;
+
+        default:
+            baseAtmos = color(random(100, 255), random(100, 255), random(100, 255), random(30, 100), random(30, 100));
+            break;
+    }
+    r2 = random(minR2, maxR2); // atmosphere radius
 }
 
 
@@ -355,18 +413,18 @@ function CreateDetails() {
         leafSizes[i] = [];
         for (let j = 0; j < res1; j++) {
             trees[i].push(false);
-            leafSizes[i].push(0); // Filling arrays so useful values are in the correct positions - there are definitely better
-            treeHeights[i].push(0); // ways of doing this but this is performant enough for an introductory summer project
+            leafSizes[i].push(0);
+            treeHeights[i].push(0);
         }
     }
 
     // Replace some values with true (signifying a tree will be placed there)
-    for (let i = 0; i < numtrees; i++) {
+    for (let i = 0; i < numTrees; i++) {
         let randMain = floor(random(res1));
         let randSub = floor(random(res1));
         
         trees[randMain][randSub] = true;
-        leafSizes[randMain][randSub] = (random(8, 12));
+        leafSizes[randMain][randSub] = (random(leafMinSize, leafMaxSize));
         treeHeights[randMain][randSub] = (random(minHeight, maxHeight));
     }
 }
@@ -412,6 +470,8 @@ function mouseDragged() {
     }
 }
 
+
+
 function mousePressed() {
     if (mouseButton === CENTER) {
         rotationX = 0;
@@ -421,6 +481,7 @@ function mousePressed() {
 
 
 
+// Function that decides whether to use random colours or chosen colours
 function CheckColourType() {
     if (pickerCheckBox.checked()) {
         usePicker = true;
@@ -432,6 +493,7 @@ function CheckColourType() {
 
 
 
+// Function that changes the colour palette type
 function ChangeColourPalette() {
     switch (paletteType.value()) {
         case 'Uniform':
@@ -451,6 +513,7 @@ function ChangeColourPalette() {
 
 
 
+// Function that changes the colour palette type for trees
 function ChangeTreePalette() {
     switch (treePaletteType.value()) {
         case 'Uniform':
@@ -469,8 +532,65 @@ function ChangeTreePalette() {
 
 
 
+// Function that changes min/max values for tree heights
 function ChangeTreeHeights() {
     minHeight = minHeightSlide.value();
     maxHeight = maxHeightSlide.value();
     CreateDetails();
+}
+
+
+
+// Function that changes min/max sizes for leaves
+function ChangeLeafSizes() {
+    leafMinSize = leafMinSizeSlide.value();
+    leafMaxSize = leafMaxSizeSlide.value();
+    CreateDetails();
+}
+
+
+
+// Function that changes the number of trees
+function ChangeNumTrees() {
+    numTrees = numTreesSlide.value();
+    CreateDetails();
+}
+
+
+
+// Function that changes min/max atmosphere
+function ChangeAtmosRange() {
+    minR2 = minR2Slide.value();
+    maxR2 = maxR2Slide.value();
+    CreateAtmos();
+}
+
+
+
+// Function that changes atmosphere palette type
+function ChangeAtmosPalette() {
+    switch (atmosPaletteType.value()) {
+        case 'Analogous':
+            atmosPalette = 0;
+            break;
+
+        case 'Uniform':
+            atmosPalette = 1;
+            break;
+
+        case 'Complementary':
+            atmosPalette = 2;
+            break;
+
+        default:
+            atmosPalette = 3;
+            break;
+    }
+    CreateAtmos();
+}
+
+
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }

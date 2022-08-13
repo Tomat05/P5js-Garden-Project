@@ -1,15 +1,28 @@
 # SIDEBAR VARIABLES
+
+✅ colour palette types
+✅ tree colour palette types
+✅ tree min/max heights
+✅ leaf min/max sizes
+✅ number of trees
+✅ atmosphere min/max height
+❌ atmosphere min/max opacity
+✅ atmosphere colour palette types
+❌ noise level
+
 - title field
 - screenshot size
 
-- colour palette types - DONE
-- tree colour palette types - DONE
-- tree min/max heights - 
-- leaf min/max sizes
-- number of trees
-- atmosphere min/max height
-- atmosphere min/max opacity
-- noise min/max
+- Lighting type
+
+
+# TITLES
 
 - Headings for sidebar
-- Title screen
+❌ Title screen
+
+
+# GRAPHICS
+
+- Shadow map
+- Other shaders / post processing
