@@ -1,30 +1,46 @@
-# P5.js Garden Project
+# Garden Worlds
 
-### Summary
+**The finished project can be found [here](https://p5.tomat05.net)**
 
-- **The finished project can be found [here](https://p5.tomat05.net).**
-- I originally tried doing the current planet project with a cube-sphere (create 6 faces, arrange them as a cube, then force each vertex to be equidistant from the centre)
-as this results in a much more even spread of detail than a UV sphere.
-- However, at this point I was on about the millionth iteration having tried:
-    - An early version of this planet thing that was extremely broken
-    - 3d procedural terrain (I decided to switch to something else because I'm indecisive like that)
-    - Multiple versions of a "design your own garden" thing using a grid of tiles which then turned into...
-    - Longer than I would like to admit trying to create various different versions of a procedural garden generator using a wavefuntion collapse algorithm (unfortunately I currently lack the skills to achieve this)
-    - Attempt two of the aforementioned cube-sphere
-- Eventually I found a coding train video on a UV sphere and decided it was good enough for my purposes.
-- Unfortunately, I lacked the foresight and basic intelligence to save most of the failed projects, however, the attempted wavefunction collapse (along with some random distraction projects) can be found [here](https://p5.tomat05.net) (not uploaded yet!).
+## Summary
 
-### Sources
+'Garden Worlds' is a procedural planet generator made with p5.js  
 
-- [Sphere](https://www.youtube.com/watch?v=RkuBWEkBrZA)
-- [P5.js reference](https://p5js.org/reference/)
+### The planet
 
-### Additional Thoughts
+When I first started this project, I intended on creating the base planet using a cube-sphere as this results in a more even spread of detail than a UV sphere  
+![image](https://user-images.githubusercontent.com/64409983/184538337-c2786bf6-6b0d-4ff8-9908-a855eb3df114.png)  
+(Left: UV sphere (concentrated detail at poles), right: cube-sphere (more even spread of detail))  
 
-- If I were to do this again I would probably go for a more object-oriented approach (if only to help with readability as the current mess of functions and variables can be a little confusing to work out at a glance).
-- I would have liked to have had patches of the detail colour rather than stripes, but due to the sphere being built around strips of triangles, this was unavoidable and not worth undoing everything to change.
-- If I were to further develop this project, I would research the possibility of using object instancing (as calculating every tree every frame is very expensive), or compute shaders (for creating all the triangles of the sphere mesh in a more efficient manner).
-- This project could definitely be optimised further but I would rather focus on projects that are more interesting and/or useful to me such as beginning to learn C and C++, continuing to develop with C# and the Unity game engine, and learning to create web-apps using React.js as a friend and I have an [ongoing project](https://lizard.social/) which will use this.
+However, upon finding [this video](https://www.youtube.com/watch?v=RkuBWEkBrZA), I realised a UV sphere would be much easier to implement and worth the tradeoff of uneven detail.  
+  
+Once I had a sphere, I created another sphere around it to form an atmosphere.
+![planet (25)](https://user-images.githubusercontent.com/64409983/184538589-3db7f5ab-0cc4-461d-8831-27ec74321b6f.png)  
+  
+I created different colours for the planet using random values. I would have preferred to have patches of colour, but I could only get it to form stripes.
+![planet(1)](https://user-images.githubusercontent.com/64409983/184538767-3f8b97c2-9104-4547-8ae4-ac8a0d82e2aa.png)  
 
+### The Trees
+  
+After adding colours, I tried to add some objects (later to become trees) onto the planets, however I ran into some issues where the objects would appear in seemingly random locations, even though I had used the vertex positions from the sphere as origins.
+![planet(6)](https://user-images.githubusercontent.com/64409983/184538900-219b2541-c8c1-4e35-b028-2e01c116311d.png)  
+  
+Eventually I got the objects to wrap around the planet as intended (at the cost of a lot of performance as I ended up calculating their positions per-frame as opposed to once on setup). I then tried to use a tree model to replace the stand-in cubes I was using previously, however due to the way the sphere is created, half of the models would always be upside-down. Eventually, I decided to just use a box with a sphere on top as a good-enough aproximation of a tree.
+![planet(4)](https://user-images.githubusercontent.com/64409983/184539186-002f1363-af43-45ca-bbce-a05281fe0648.png)  
+(In this picture I had also started working on a title for screenshots)  
+  
+### User Interface and Screenshots
 
-- I will probably have another go at wavefunction collapse using a tool such as Unity where I can learn more about it with a more feature-rich tool and without having to wrestle with the weird global-not-global-no-transforming-unless-you-literally-move-where-(0,0,0)-is-pushing-and-popping-all-day-long origin that p5.js uses that seems to have a mind of its own!
+Having finished the basic planet generation, I began working on settings to allow the user to control the look of the planets. I used a texture for the heading of each setting as this was cheaper than using the `createGraphics()` function (p5.js in webgl mode requires this to render text)
+![image](https://user-images.githubusercontent.com/64409983/184539451-4da0dc9e-a216-40d5-99ca-7891549e8b8b.png)  
+(The pinnacle of UI design, created with blood, sweat, tears, and 5 minutes in GIMP)  
+  
+Finally, I added the ability to take a screenshot with your own title
+![planet](https://user-images.githubusercontent.com/64409983/184539603-cf67b715-fb88-49da-acfd-653eba37f14d.png)  
+  
+## Additional Thoughts
+
+If I were to do this project again, I would probably go for a more object-oriented approach as this project very quickly turned into a maze of functions.  
+Also, the project has a number of shortcomings such as the trees causing a large performance hit due to being recalculated every frame, and the fact that objects in p5.js don't cast shadows in other objects so the "realistic" lighting mode can look a bit terrible. If I were to redo this project, I would find a way of generating the trees once in setup before I had already implemented all the planet code, and I would spend some time learning about GLSL and shaders in order to create a shadow map so the things that should be in shadow, are.  
+![image](https://user-images.githubusercontent.com/64409983/184539955-4e780168-a86b-44fa-b39a-66847abf66fd.png)  
+(The trees inside the red circle should be in shadow but aren't because p5.js ignores the HugeGreatBigPlanetTM between them and the light source)
