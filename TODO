@@ -6,23 +6,14 @@
 ✅ leaf min/max sizes
 ✅ number of trees
 ✅ atmosphere min/max height
-❌ atmosphere min/max opacity
 ✅ atmosphere colour palette types
-❌ noise level
 
-- title field
-- screenshot size
+✅ title field
 
-- Lighting type
+✅ Lighting type
 
 
 # TITLES
 
-- Headings for sidebar
-❌ Title screen
-
-
-# GRAPHICS
-
-- Shadow map
-- Other shaders / post processing
+✅ Headings for sidebar
+✅ Controls info

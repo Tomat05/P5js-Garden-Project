@@ -54,39 +54,48 @@ let leafMaxSizeSlide;
 let leafMinSize = 7;
 let leafMaxSize = 14;
 
+// LIGHTING
+let lightTypeSelect;
+let lightType = 0;
+let lightXSlide;
+let lightYSlide;
+let lightZSlide;
+let lightX = -1;
+let lightY = 0.5;
+let lightZ = -0.5;
+
 // MOUSE
 let rotationX = 0;
 let mouseXOld;
 let zoom = 1;
 
-// SIDEBAR
-let sidebar;
-let reveal = false;
-let slide;
-
 // SCREENSHOT
+let settings;
 let title;
+let titleTexture;
 let screenshot = false;
+let saveButton;
+
+// INFO
+let info;
 
 
 
 function preload() {
-    title = loadImage("P5Title.png"); // Using a texture as the in-built text requires 'createGraphic()' in WebGL mode which drastically decreases performance
+    settings = loadImage("Settings.png"); // Using a texture is easier and more performant than createGraphic
+
+    info = loadImage("Info.png");
 }
 
 
 
 function setup() {
     angleMode(DEGREES);
-
-	createCanvas(windowWidth, windowHeight, WEBGL);
-
     document.oncontextmenu = function() { return false; } // No menu appears on right click
 
-    mouseXOld = mouseX; // Set initial mouseXOld
+	canv = createCanvas(windowWidth, windowHeight, WEBGL);
 
-    // SIDEBAR
-    slide = -200;
+    mouseXOld = mouseX; // Set initial mouseXOld
 
     // Checkbox for whether to use picker or random colours
     pickerCheckBox = createCheckbox(false);
@@ -142,14 +151,30 @@ function setup() {
     atmosPaletteType.selected('Random');
     atmosPaletteType.changed(ChangeAtmosPalette);
 
+    // Title text field
+    title = createInput('Garden Planets');
+
+    // Lighting type selection
+    lightTypeSelect = createSelect();
+    lightTypeSelect.option('Cartoon');
+    lightTypeSelect.option('Realistic');
+    lightTypeSelect.selected('Cartoon');
+    lightTypeSelect.changed(ChangeLightType);
+
+    // Sliders for directional light position
+    lightXSlide = createSlider(-100, 100, -100);
+    lightXSlide.changed(ChangeLightPos);
+    lightYSlide = createSlider(-100, 100, 50);
+    lightYSlide.changed(ChangeLightPos);
+    lightZSlide = createSlider(-100, 100, -50);
+    lightZSlide.changed(ChangeLightPos);
+
     // Button to save picture of canvas
-    // let saveButton = createButton("Save");
-    // saveButton.style("width: 75px; height: 30px");
-    // saveButton.position(10, 20);
-    // saveButton.mousePressed(Save);
+    saveButton = createButton("Take Screenshot");
+    saveButton.style("width: 120px; height: 30px");
+    saveButton.mousePressed(Save);
 
     // GENERATION
-    CreateStars(); // Generate everything
     Generate();
 }
 
@@ -157,58 +182,59 @@ function setup() {
 
 function draw() {
 	background(0);
-    angleMode(DEGREES); // WHY. IS. THE. DEFAULT. RADIANS. ALSKJDHSLDKJF >:/
-
-    // SIDEBAR
-    pickerCheckBox.position(slide + 10, 10);
-    colourPick.position(slide + 10, 35);
-    paletteType.position(slide + 10, 70);
-    treePaletteType.position(slide + 10, 120);
-    minHeightSlide.position(slide + 10, 150);
-    maxHeightSlide.position(slide + 10, 170);
-    leafMinSizeSlide.position(slide + 10, 200)
-    leafMaxSizeSlide.position(slide + 10, 220)
-    numTreesSlide.position(slide + 10, 250);
-    minR2Slide.position(slide + 10, 280);
-    maxR2Slide.position(slide + 10, 300);
-    atmosPaletteType.position(slide + 10, 330);
+    angleMode(DEGREES); // I hate that the default is radians
 
     push();
-    fill(20, 20, 20);
-    translate(0, -height / 2);
-    rect(-width / 2 + slide, 0, 200, height);
-
-    if (mouseX <= 15) {
-        reveal = true;
-    }
-    if (mouseX > 200) {
-        reveal = false;
-    }
-
-    if (reveal) {
-        if (slide < 0) {
-            slide += 10;
-        }
-    }
-    else {
-        if (slide > -200) {
-            slide -= 10;
-        }
-    }
+    texture(info);
+    translate((width / 2) - (1920 / 5) - 10, -height / 2 + 10);
+    rect(0, 0, 1920 / 5, 1080 / 5);
     pop();
 
-    // TITLE
-    if (screenshot) {
-        push();
-        translate(-width / 2 + 20, -height / 2 + 20);
-        texture(title);
-        rect(0, 0, 437, 44.5);
+    // SIDEBAR
+    pickerCheckBox.position(90, 90);
+    colourPick.position(75, 110);
+    paletteType.position(42.5, 170);
+    treePaletteType.position(42.5, 230);
+    atmosPaletteType.position(40, 295);
+    minHeightSlide.position(35, 355);
+    maxHeightSlide.position(35, 370);
+    leafMinSizeSlide.position(35, 430)
+    leafMaxSizeSlide.position(35, 445)
+    minR2Slide.position(35, 505);
+    maxR2Slide.position(35, 520);
+    numTreesSlide.position(35, 580);
+    title.position(10, 640);
+    lightTypeSelect.position(65, 710);
+    lightXSlide.position(35, 770);
+    lightYSlide.position(35, 785);
+    lightZSlide.position(35, 800);
+    saveButton.position(40, height - 75);
+
+    push();
+    if (!screenshot) {
+        texture(settings);
+        translate(0, -height / 2);
+        rect(-width / 2, 0, 200, 1080);
         pop();
     }
 
+    // Title for Screenshots
+    push();
+    if (screenshot) {
+        texture(titleTexture);
+        noStroke();
+        translate(-width / 4, -height / 2 + 80);
+        plane(width / 2, 160);
+    }
+    pop();
+
     // LIGHTS
-	// directionalLight(255, 255, 255, -1, 0, 0);
-    ambientLight(255);
+    if (lightType === 1) {
+        directionalLight(255, 255, 255, lightX, lightY, lightZ);
+    }
+    else {
+        ambientLight(255);
+    }
 
     // STARS
 	push();
@@ -236,7 +262,6 @@ function draw() {
             let v2 = globe[i+1][j];
 
             ambientMaterial(terrainColours[i][j]);
-            //fill(255);
             normal(v1.x, v1.y, v1.z);
             vertex(v1.x, v1.y, v1.z);
 
@@ -245,6 +270,8 @@ function draw() {
             vertex(v2.x, v2.y, v2.z);
 
             // DETAILS
+            /* *Really* inefficient, needs to be precomputed rather than done every frame but I tried that and it made trees start existing in 
+            whatever position they felt like at the time and 650 lines into the project it works well enough to not be worth reworking the entire thing*/
             if (trees[i][j] === true) {
                 push();
                 let treeColour;
@@ -296,6 +323,7 @@ function draw() {
 function Generate() {
     colourShift = random(-100, -20);
 
+    CreateStars();
     CreatePlanet();
     CreateAtmos();
     CreateDetails();
@@ -433,10 +461,19 @@ function CreateDetails() {
 
 // Save a 1440p picture of the canvas
 function Save() {
+    titleTexture = createGraphics(width, 300);
+    titleTexture.background(color(0, 0));
+    titleTexture.textFont('Verdana');
+    titleTexture.textStyle(BOLD);
+    titleTexture.textAlign(LEFT);
+    titleTexture.textSize(100);
+    titleTexture.fill(255);
+    titleTexture.noStroke();
+    titleTexture.text(title.value(), 75, 150);
+
     screenshot = true;
-    resizeCanvas(2560, 1440);
+    resizeCanvas(windowWidth, windowHeight); // Essentially the world's jankiest `wait for next frame` - needed for the UI to be hidden and title to show up
     save("planet.png")
-    resizeCanvas(windowWidth, windowHeight);
     screenshot = false;
 }
 
@@ -444,7 +481,7 @@ function Save() {
 
 // Re-generate planet on enter key pressed
 function keyPressed() {
-    if (keyCode === 32) {
+    if (keyCode === ENTER) {
         Generate();
     }
 }
@@ -453,7 +490,7 @@ function keyPressed() {
 
 // Movement stuff on mouse drag
 function mouseDragged() {
-    if (!reveal) {
+    if (mouseX > 200) {
         switch (mouseButton) {
             case LEFT:
                 rotationX -= (mouseX - mouseXOld) / 4;
@@ -587,6 +624,26 @@ function ChangeAtmosPalette() {
             break;
     }
     CreateAtmos();
+}
+
+
+
+function ChangeLightType() {
+    if (lightTypeSelect.value() === 'Realistic') {
+        lightType = 1;
+    }
+    else {
+        lightType = 0;
+    }
+}
+
+
+
+function ChangeLightPos() {
+    lightX = lightXSlide.value();
+    lightY = lightYSlide.value();
+    lightZ = lightZSlide.value();
+    
 }
 
 
