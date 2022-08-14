@@ -31,7 +31,7 @@ Eventually I got the objects to wrap around the planet as intended (at the cost 
   
 ### User Interface and Screenshots
 
-Having finished the basic planet generation, I began working on settings to allow the user to control the look of the planets. I used a texture for the heading of each setting as this was cheaper than using the `createGraphics()` function (p5.js in webgl mode requires this to render text)
+Having finished the basic planet generation, I began working on settings to allow the user to control the look of the planets. I used a texture for the heading of each setting as this was cheaper than using the `createGraphics()` function (p5.js in webgl mode requires this to render text)  
 ![image](https://user-images.githubusercontent.com/64409983/184539451-4da0dc9e-a216-40d5-99ca-7891549e8b8b.png)  
 (The pinnacle of UI design, created with blood, sweat, tears, and 5 minutes in GIMP)  
   
