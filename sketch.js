@@ -189,12 +189,6 @@ function draw() {
 	background(0);
     angleMode(DEGREES); // I hate that the default is radians
 
-    push();
-    texture(info);
-    translate((width / 2) - (1920 / 6) - 10, -height / 2 + 10);
-    rect(0, 0, 1920 / 6, 1080 / 6);
-    pop();
-
     // SIDEBAR
     pickerCheckBox.position(90, 90);
     colourPick.position(75, 110);
@@ -216,8 +210,14 @@ function draw() {
     saveButton.position(40, 830);
     gitLink.position(75, height - 40);
 
-    push();
     if (!screenshot) {
+        push();
+        texture(info);
+        translate((width / 2) - (1920 / 6) - 10, -height / 2 + 10);
+        rect(0, 0, 1920 / 6, 1080 / 6);
+        pop();
+
+        push();
         texture(settings);
         translate(0, -height / 2);
         rect(-width / 2, 0, 200, 1080);
