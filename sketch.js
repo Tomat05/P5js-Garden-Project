@@ -78,6 +78,7 @@ let saveButton;
 
 // INFO
 let info;
+let gitLink;
 
 
 
@@ -174,6 +175,10 @@ function setup() {
     saveButton.style("width: 120px; height: 30px");
     saveButton.mousePressed(Save);
 
+    // Github link
+    gitLink = createA("https://github.com/Tomat05/P5js-Garden-Project", "Github", "_blank");
+    gitLink.style("color: #fff");
+
     // GENERATION
     Generate();
 }
@@ -186,8 +191,8 @@ function draw() {
 
     push();
     texture(info);
-    translate((width / 2) - (1920 / 5) - 10, -height / 2 + 10);
-    rect(0, 0, 1920 / 5, 1080 / 5);
+    translate((width / 2) - (1920 / 6) - 10, -height / 2 + 10);
+    rect(0, 0, 1920 / 6, 1080 / 6);
     pop();
 
     // SIDEBAR
@@ -208,7 +213,8 @@ function draw() {
     lightXSlide.position(35, 770);
     lightYSlide.position(35, 785);
     lightZSlide.position(35, 800);
-    saveButton.position(40, height - 75);
+    saveButton.position(40, 830);
+    gitLink.position(75, height - 40);
 
     push();
     if (!screenshot) {
