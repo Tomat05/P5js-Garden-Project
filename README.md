@@ -43,4 +43,6 @@ Finally, I added the ability to take a screenshot with your own title
 If I were to do this project again, I would probably go for a more object-oriented approach as this project very quickly turned into a maze of functions.  
 Also, the project has a number of shortcomings such as the trees causing a large performance hit due to being recalculated every frame, and the fact that objects in p5.js don't cast shadows in other objects so the "realistic" lighting mode can look a bit terrible. If I were to redo this project, I would find a way of generating the trees once in setup before I had already implemented all the planet code, and I would spend some time learning about GLSL and shaders in order to create a shadow map so the things that should be in shadow, are.  
 ![image](https://user-images.githubusercontent.com/64409983/184539955-4e780168-a86b-44fa-b39a-66847abf66fd.png)  
-(The trees inside the red circle should be in shadow but aren't because p5.js ignores the HugeGreatBigPlanetTM between them and the light source)
+(The trees inside the red circle should be in shadow but aren't because p5.js ignores the HugeGreatBigPlanetTM between them and the light source)  
+  
+In summary, working with p5.js has caused me unending pain and misery, so, were I to *actually* attempt this project again, I would use a different tool more suited to the task (perhaps three.js although I've never used it just heard good things)
